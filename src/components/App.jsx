@@ -1,12 +1,12 @@
-
+import React from 'react';
 import Reviews from "./Reviews/Reviews";
-
+import calculateTotalFeedback from "./Reviews/Reviews"
 
 export const App = () => {
   return (
     <div
       style={{
-        height: '100vh',
+        
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -15,7 +15,7 @@ export const App = () => {
         color: '#010101',
       }}
     >
-      <Reviews total = {0}
+      <Reviews 
       />
      
     </div>

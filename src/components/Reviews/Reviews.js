@@ -1,10 +1,10 @@
 import React from 'react';
 import s from './Reviews.module.css';
-
+import Statistics from './Statistics/Statistics';
+import FeedbackOptions from './FeedbackOptions/FeedbackOptions';
+import Section from './Section/Section';
+import Notification from 'components/Notification/Notification';
 class Reviews extends React.Component {
-    static defaultProps = {
-    total:0
-}
 
   state = {
     good: 0,
@@ -12,54 +12,62 @@ class Reviews extends React.Component {
     bad: 0,
   };
 
-  onIncreaseGood = () => {
-    this.setState(prevState => {
-      return {
-        good: prevState.good + 1,
-      };
-    });
-  };
-  onIncreaseNeutral = () => {
-    this.setState(prevState => {
-      return {
-        neutral: prevState.neutral + 1,
-      };
-    });
-  };
+    onIncrease = (evt) => {
+        const { name } = evt.target
+ 
+        
+       this.setState({ [name]: this.state[name] + 1 });
 
-  onIncreaseBad = () => {
-    this.setState(prevState => {
-      return {
-        bad: prevState.bad + 1,
-      };
-    });
+            return this.state[name]
+        
+    }
+    
+
+//   onIncreaseGood = () => {
+//     this.setState(prevState => {
+//       return {
+//         good: prevState.good + 1,
+//       };
+//     });
+//   };
+//   onIncreaseNeutral = () => {
+//     this.setState(prevState => {
+//       return {
+//         neutral: prevState.neutral + 1,
+//       };
+//     });
+//   };
+
+//   onIncreaseBad = () => {
+//     this.setState(prevState => {
+//       return {
+//         bad: prevState.bad + 1,
+//       };
+//     });
+//   };
+
+  countTotalFeedback = () => {
+      const total = this.state.good + this.state.bad + this.state.neutral;
+      
+             console.log(this.state.good);
+      return total ;
     };
     
 
-    countTotalFeedback = () => {
-        this.setState(prevState => {         
-            return {
-                total: prevState.good + prevState.bad + prevState.neutral
-            }
-        ;
-      });
+  countPositiveFeedbackPercentage = () => {
+    const percentage = Math.floor(
+      (this.state.good * 100) / this.countTotalFeedback()
+    );
+
+    return percentage;
+    };
     
-  };
 
-    render() {
-        countTotalFeedback = () => {
-
-         }
-
-        const total = this.state.good + this.state.bad + this.state.neutral;
-    const percentage = Math.floor((this.state.good * 100) / total)
-        
-      
-    // const { good, neutral, bad } = this.state;
+  render() {
     return (
       <div className={s.container}>
-        <h1 className="feedback">Please, leave feedback</h1>
-        <button
+        <Section title={'Please, leave feedback'}>
+          {/* <button
           className="container__button--good"
           name="good"
           onClick={this.onIncreaseGood}
@@ -79,11 +87,32 @@ class Reviews extends React.Component {
           onClick={this.onIncreaseBad}
         >
           bad
-        </button>
-        <h2 className="statistics">Statistics</h2>
+            </button> */}
+                {!this.state.good && !this.state.neutral && !this.state.bad
+                    ?
+               <> <Notification message={'There is no feedback'} />
+          <FeedbackOptions
+            options={this.state}
+            onLeaveFeedback={this.onIncrease}
+                        /></>
+                        :<><FeedbackOptions
+            options={this.state}
+            onLeaveFeedback={this.onIncrease}
+                        />
+                        <Statistics
+            good={this.state.good}
+            neutral={this.state.neutral}
+            bad={this.state.bad}
+            total={this.countTotalFeedback()}
+            percentage={this.countPositiveFeedbackPercentage()}
+          /></>}
+                
+          
+        </Section>
+        {/* <h2 className="statistics">Statistics</h2>
 
-        <p className="review__name">
           Good:
+        <p className="review__name">
           <span className="review__counter">{this.state.good}</span>
         </p>
         <p className="review__name">
@@ -96,12 +125,17 @@ class Reviews extends React.Component {
         </p>
         <p className="review__name">
           Total:
-          <span className="review__counter">{total}</span>
+          <span className="review__counter">{this.countTotalFeedback()}</span>
         </p>
         <p className="review__name">
           Positive feedback:
-          <span className="review__counter">{percentage}%</span>
-        </p>
+          <span className="review__counter">
+            {this.countTotalFeedback() === 0
+              ? 0
+              : this.countPositiveFeedbackPercentage()}
+            %
+          </span>
+        </p> */}
       </div>
     );
   }
